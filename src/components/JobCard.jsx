@@ -37,7 +37,18 @@ const JobCard = ({ job, isHighlighted }) => {
     const { t, i18n } = useTranslation();
 
     const buildSpeechText = () => {
-        const text = t("speech.jobSummary", {
+        if (lang === "hi") {
+            return `
+        ${t(`jobTitle.${job.title}`)} की नौकरी।
+        जगह ${job.location.area}, ${job.location.city}।
+        वेतन ${job.salary.amount} रुपये।
+        समय ${t(`schedule.${job.schedule}`)}।
+        रेटिंग ${job.trust.rating}।
+        `;
+        }
+
+
+        return t("speech.jobSummary", {
             title: t(`jobTitle.${job.title}`),
             category: t(`category.${job.category}`),
             area: job.location.area,
@@ -50,23 +61,6 @@ const JobCard = ({ job, isHighlighted }) => {
                 .join(", "),
             rating: job.trust.rating,
         });
-
-        if (text === "speech.jobSummary") {
-            return i18n.t("speech.jobSummary", {
-                lng: "en",
-                title: job.title,
-                category: job.category,
-                area: job.location.area,
-                city: job.location.city,
-                salary: job.salary.amount,
-                salaryType: job.salary.type,
-                schedule: job.schedule,
-                languages: job.language_required.join(", "),
-                rating: job.trust.rating,
-            });
-        }
-
-        return text;
     };
 
     const speak = () => {
